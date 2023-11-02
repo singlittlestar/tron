@@ -1,37 +1,47 @@
 <!DOCTYPE html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-       <script type="module">
-           import Web3 from "./web3";
-           import WalletConnectProvider from "./walletconnect/web3-provider";
-           import Web3Modal from "./web3modal";
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Web3Modal Example</title>
+</head>
+<body>
+<button id="connectButton">Connect to Wallet</button>
 
-           const providerOptions = {
-               walletconnect: {
-                   package: WalletConnectProvider,
-                   options: {
-                       rpc: {
-                           56: "https://bsc-dataseed1.binance.org",
-                       },
-                       chainId: 56,
-                   },
-               },
-           };
-           const web3Modal = new Web3Modal({
-               network: "mainnet", // optional
-               cacheProvider: true, // optional
-               providerOptions, // required
-           });
-           const provider = await web3Modal.connect();
-           await web3Modal.toggleModal();
-           const newWeb3 = new Web3(provider);
-           const accounts = await newWeb3.eth.getAccounts();
-           alert(accounts)
+<script type="module">
+    import Web3Modal from "web3modal";
+    import WalletConnectProvider from "@walletconnect/web3-provider";
+    import Web3 from "web3";
 
-       </script>
+    const web3Modal = new Web3Modal({
+        network: "mainnet", // 可选，指定网络名称
+        cacheProvider: true, // 可选，是否缓存提供程序
+        providerOptions: {
+            walletconnect: {
+                package: WalletConnectProvider,
+                options: {
+                    rpc: {
+                        56: "https://bsc-dataseed1.binance.org",
+                    },
+                    chainId: 56,
+                },
+            },
+            // 其他区块链钱包选项...
+        },
+    });
 
-    </body>
+    const connectButton = document.getElementById("connectButton");
+
+    connectButton.addEventListener("click", async () => {
+        try {
+            const provider = await web3Modal.connect();
+            const newWeb3 = new Web3(provider);
+            const accounts = await newWeb3.eth.getAccounts();
+            alert("Connected to wallet. Accounts: " + accounts);
+        } catch (error) {
+            alert("Error connecting to wallet: " + error.message);
+        }
+    });
+</script>
+</body>
 </html>
+
