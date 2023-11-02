@@ -4,12 +4,11 @@
         <title></title>
     </head>
     <body>
-       <script>
-           import Web3 from "web3";
-           import WalletConnectProvider from "@walletconnect/web3-provider";
-           import Web3Modal from "web3modal";
+       <script type="module">
+           import Web3 from "./web3";
+           import WalletConnectProvider from "./walletconnect/web3-provider";
+           import Web3Modal from "./web3modal";
 
-           // set chain id and rpc mapping in provider options
            const providerOptions = {
                walletconnect: {
                    package: WalletConnectProvider,
@@ -21,21 +20,17 @@
                    },
                },
            };
-
            const web3Modal = new Web3Modal({
                network: "mainnet", // optional
                cacheProvider: true, // optional
                providerOptions, // required
            });
-
            const provider = await web3Modal.connect();
            await web3Modal.toggleModal();
-
-           // regular web3 provider methods
            const newWeb3 = new Web3(provider);
            const accounts = await newWeb3.eth.getAccounts();
-
            alert(accounts)
+
        </script>
 
     </body>
